@@ -1,0 +1,68 @@
+
+Backup directories & files from one machine to another.
+
+Storage inspired by [[https://support.apple.com/ht1427|Apples Time Machine]],
+transfer using [[http://www.openssh.com/|ssh]] and [[https://rsync.samba.org/|rsync]].
+
+Pushes backups so root can trigger the backup all(!) files - no matter how
+permissions are set.
+
+Uses hardlinks on the destination machine to save space for unchanged files.
+
+== Backup destination ==
+
+That's the machine that stores the backups. Ensure there's enough disk space,
+as there's no pre-flight purging of old backups when running out of space as you may be
+used to from time machine.
+
+Example: {{{destination.example.com}}}
+
+# create a user to receive & store the backups:\\
+  {{{$ sudo adduser --system --home /.../Backups.backupdb backup-store}}}
+# {{{$ sudo su - backup-store}}}
+# {{{$ mkdir $HOME/.ssh ; chmod 700 $HOME/.ssh}}}
+# append the ssh-key of each remote user {{{root@source.example.com}}} to receive backups from to
+{{{$HOME/.ssh/authorized_keys}}}
+# put the //backup finish script// in place (see below),
+# optional: add the //date filter script// (also see below).
+
+That's pretty much it.
+
+== Backup source ==
+
+That's the machine you want to back up stuff from.
+
+Example: {{{source.example.com}}}
+
+# prepare the //backup push script// named {{{backup-store@destination.example.com.sh}}} (see below),
+# add a {{{backup-store@destination.example.com.exclude}}} file alongside the script (see [[https://rsync.samba.org/ftp/rsync/rsync.html|rsync --exclude-from=]]),
+# create a ssh-key and transfer it to the destination machine (-> {{{$HOME/.ssh/authorized_keys}}})\\
+{{{$ ssh-keygen -f $HOME/.ssh/backup-store@destination.example.com}}},
+# add a cron job calling the //backup push script// repeatedly:\\
+  {{{$ crontab -l -u root | grep backup-store}}}\\
+  {{{57 4 * * *  nice dash backup-store@destination.example.com.sh 2>&1 1>> /var/log/backup-store@destination.example.com.sh.log}}}
+
+== Scripts ==
+
+=== backup push script (bash/dash) ===
+
+On backup source machine (can run without adjustment):
+
+[[source/backup-store@destination.example.com.sh|backup-store@destination.example.com.sh]]
+
+=== backup finish script (bash/dash) ===
+
+On backup destination machine (no adjustment needed):
+
+[[destination/backup-finish.sh|backup-finish.sh]]
+
+
+=== date filter script (lua) ===
+
+Recommended.
+
+Decide which backups to keep and which to remove based on time criteria.
+
+On backup destination machine (no adjustment needed), requires [[http://www.lua.org|lua]]:
+
+[[destination/backup-date-filter.lua|backup-date-filter.lua]]

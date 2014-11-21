@@ -1,0 +1,22 @@
+/bin
+/boot
+/dev
+/lib
+/mnt
+/proc
+/sbin
+/selinux
+/sys
+/tmp
+/usr
+/var/cache
+# /var/log
+/var/run
+/var/spool
+/var/lib/transmission-daemon
+.ssh
+/etc/ssl/private
+/etc/ssl.crt
+/etc/ssl.key
+/home/*/tmp
+/home/*/Downloads/
