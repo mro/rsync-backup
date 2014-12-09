@@ -102,7 +102,7 @@ function Filter:bucket_index(ts)
     -- io.stderr:write(' ts=', ts, ' th=', threshold, ' fr=', frequency, '\n')
     if threshold < assert(ts) then
       -- we're in!
-      return 1 + math.floor(os.difftime(self.now_, ts) / frequency)
+      return 1 + math.floor(ts / frequency)
     end
   end
   return nil
@@ -143,12 +143,15 @@ function Filter:callback(line, keep)
 end
 
 
-Filter:init{
+local t0 = nil
+if arg[1] then t0 = arg[1]:iso8601_to_time() end
+
+Filter:init({
   P1D   = 'PT1H', -- all younger 1 day: hourly
   P1M   = 'P1D',  -- all younger 1 month: daily
   P3M   = 'P3D',  -- all younger 3 months: 3-days
   P1Y   = 'P7D',
   P10Y  = 'P1M',
-}
+}, t0)
 while Filter:process(io.read('*l')) do end
 Filter:finish()
