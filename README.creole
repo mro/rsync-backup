@@ -4,7 +4,7 @@ Backup directories & files from one machine to another.
 Storage inspired by [[https://support.apple.com/ht1427|Apples Time Machine]],
 transfer using [[http://www.openssh.com/|ssh]] and [[https://rsync.samba.org/|rsync]].
 
-Pushes backups so root can trigger the backup all(!) files - no matter how
+Pushes backups so root can trigger the backup **all(!)** files - no matter how
 permissions are set.
 
 Uses hardlinks on the destination machine to save space for unchanged files.
@@ -37,7 +37,7 @@ Example: {{{source.example.com}}}
 # prepare the //backup push script// named {{{backup-store@destination.example.com.sh}}} (see below),
 # add a {{{backup-store@destination.example.com.exclude}}} file alongside the script (see [[https://rsync.samba.org/ftp/rsync/rsync.html|rsync --exclude-from=]]),
 # create a ssh-key and transfer it to the destination machine (-> {{{$HOME/.ssh/authorized_keys}}})\\
-{{{$ ssh-keygen -f $HOME/.ssh/backup-store@destination.example.com}}},
+{{{$ ssh-keygen -t rsa -b 4096 -f $HOME/.ssh/backup-store@destination.example.com}}},
 # add a cron job calling the //backup push script// repeatedly:\\
   {{{$ crontab -l -u root | grep backup-store}}}\\
   {{{57 4 * * *  nice dash backup-store@destination.example.com.sh 2>&1 1>> /var/log/backup-store@destination.example.com.sh.log}}}
