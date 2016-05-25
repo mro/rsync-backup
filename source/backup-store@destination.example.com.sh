@@ -35,7 +35,7 @@ dst_host="$(basename "$0" .sh)"
 dst_dir="~/$(/bin/hostname)"
 # dst_dir="~/..." # manually set a pretty hostname if desired
 
-ssh_opts="-i /root/.ssh/$dst_host"
+ssh_opts="-i $HOME/.ssh/$dst_host"
 
 
 ###########################################################
@@ -43,7 +43,7 @@ ssh_opts="-i /root/.ssh/$dst_host"
 excl="$(dirname "$0")/$(basename "$0" .sh).exclude"
 timestamp=$(/bin/date "+%Y-%m-%d-%H%M%S")
 
-/bin/date
+/bin/date +'%FT%T%z'
 
 # debian: save package list
 apt-mark showmanual > "$HOME/apt-mark.showmanual"
@@ -56,8 +56,8 @@ apt-mark showmanual > "$HOME/apt-mark.showmanual"
 # |tee $HOME/Downloads/backup.stdout 2> $HOME/Downloads/backup.stderr 
 /bin/echo rsync exit code: $?
 
-/usr/bin/ssh $ssh_opts $dst_host sh backup-finish.sh "$dst_dir/$timestamp.incomplete"
+/usr/bin/ssh $ssh_opts "$dst_host" sh backup-finish.sh "$dst_dir/$timestamp.incomplete"
 
 /bin/echo ssh exit code: $?
 
-/bin/date
+/bin/date +'%FT%T%z'

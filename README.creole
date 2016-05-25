@@ -18,7 +18,7 @@ used to from time machine.
 Example: {{{destination.example.com}}}
 
 # create a user to receive & store the backups:\\
-  {{{$ sudo adduser --system --home /.../Backups.backupdb backup-store}}}
+  {{{$ sudo adduser --home /.../Backups.backupdb backup-store}}}
 # {{{$ sudo su - backup-store}}}
 # {{{$ mkdir $HOME/.ssh ; chmod 700 $HOME/.ssh}}}
 # append the ssh-key of each remote user {{{root@source.example.com}}} to receive backups from to
@@ -54,7 +54,7 @@ On backup source machine (can run without adjustment):
 
 On backup destination machine (no adjustment needed):
 
-[[destination/backup-finish.sh|backup-finish.sh]]
+[[destination:$HOME/backup-finish.sh|backup-finish.sh]]
 
 
 === date filter script (lua) ===
@@ -65,4 +65,4 @@ Decide which backups to keep and which to remove based on time criteria.
 
 On backup destination machine (no adjustment needed), requires [[http://www.lua.org|lua]]:
 
-[[destination/backup-date-filter.lua|backup-date-filter.lua]]
+[[destination:$HOME/backup-date-filter.lua|backup-date-filter.lua]]
